@@ -1,32 +1,100 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-xl-6 col-lg-8 col-md-10">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white border-bottom-0 pt-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="card-title mb-0 text-center w-100">
-                                <i class="bi bi-journal-plus me-2"></i>Tambah Majalah Baru
-                            </h4>
-                        </div>
+<style>
+    :root {
+        --primary: #2c5f7d;
+        --radius: 16px;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
 
-                        <nav aria-label="breadcrumb" class="d-flex justify-content-center">
-                            <ol class="breadcrumb mb-0">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('admin.magazines.index') }}" class="text-decoration-none">
-                                        <i class="bi bi-journals me-1"></i>Data Majalah
-                                    </a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    <i class="bi bi-plus-circle me-1"></i>Tambah
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
+    .magazine-card {
+        max-width: 960px;
+        margin: 3rem auto;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
 
-                    <div class="card-body p-4">
+    .card-header {
+        background: var(--primary);
+        color: white;
+        padding: 1.25rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control,
+    .form-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(44, 95, 125, 0.15);
+    }
+
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: #e74c3c;
+    }
+
+    .btn {
+        border-radius: 30px;
+        padding: 0.7rem 2rem;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #1e4a66;
+    }
+
+
+    .current-cover {
+        margin-top: 0.5rem;
+    }
+
+    .current-cover img {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+        .magazine-card { margin: 1rem; border-radius: 12px; }
+        .card-body { padding: 1.5rem; }
+        .card-header { padding: 1rem 1.5rem; font-size: 1rem; }
+    }
+</style>
+
+    <div class="magazine-card">
+
+         <div class="card-header">
+        <a href="{{route('admin.magazines.index')}}" style="color: white;">Data Majalah </a>\ Tambah
+    </div>
+
+
+
+                    <div class="card-body">
                         <form method="POST" action="{{ route('admin.magazines.store') }}" enctype="multipart/form-data">
                             @csrf
 
@@ -89,8 +157,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+
                                     <div class="mb-3">
                                         <label for="promo_id" class="form-label fw-semibold">Promo</label>
                                         <select name="promo_id" id="promo_id"
@@ -106,9 +173,9 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                              
 
-                                <div class="col-md-6">
+
                                     <div class="mb-3">
                                         <label for="cover" class="form-label fw-semibold">Cover Majalah</label>
                                         <input type="file" name="cover" id="cover"
@@ -119,8 +186,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
-                            </div>
+
 
                             <div class="mb-4">
                                 <label for="description" class="form-label fw-semibold">Deskripsi</label>
