@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MagazineExport;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MagazineController extends Controller
 {
@@ -125,39 +126,7 @@ class MagazineController extends Controller
 
     public function magazineList(Request $request, $magazines_id)
     {
-        $sortPrice = $request->sort_price; // ASC / DESC
-        // $sortAlfabet = $request->sort_alfabet; // ASC / DESC
-        // $sortPromo = $request->sort_promo; // ASC / DESC
-
-        // // ambil data magazine + promo
-        // // $magazines = Magazine::with('promo')->get();
-
-        // // --------------------------
-        // // SORT HARGA
-        // // --------------------------
-        // if ($sortPrice) {
-        //     $magazines = $magazines->sortBy(function($mag) {
-        //         return $mag->price;
-        //     }, SORT_REGULAR, $sortPrice === 'DESC')->values();
-        // }
-
-        // // --------------------------
-        // // SORT ALFABET DARI TITLE
-        // // --------------------------
-        // if ($sortAlfabet) {
-        //     $magazines = $magazines->sortBy(function($mag) {
-        //         return $mag->title;
-        //     }, SORT_REGULAR, $sortAlfabet === 'DESC')->values();
-        // }
-
-        // // --------------------------
-        // // SORT PROMO NAME (jika ada relasi promo)
-        // // --------------------------
-        // if ($sortPromo) {
-        //     $magazines = $magazines->sortBy(function($mag) {
-        //         return $mag->promo->name ?? ''; // kalau null, kasih string kosong
-        //     }, SORT_REGULAR, $sortPromo === 'DESC')->values();
-        // }
+        // $sortPrice = $request->sort_price;
 
         $magazines = Magazine::with('promo')->findOrFail($magazines_id);
         return view('showMagazine.detail', compact('magazines'));
@@ -402,12 +371,39 @@ class MagazineController extends Controller
             $query->select('magazine_id')
                 ->from('orders')
                 ->where('user_id', $userId);
-        })
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        })->orderBy('created_at', 'desc')
+        ->paginate(12);
 
         $purchasedCount = $purchasedMagazines->total();
 
         return view('magazine.index', compact('purchasedMagazines', 'purchasedCount'));
     }
+
+    public function exportPdf()
+    {
+        // Ambil semua data majalah dengan relasi promo
+        $magazines = Magazine::with('promo')->get()->toArray();
+
+        // Kirim data ke view
+        view()->share('magazines', $magazines);
+
+        // Generate PDF
+        $pdf = Pdf::loadView('admin.magazine.export-pdf', $magazines);
+
+        // Penamaan file
+        $fileName = 'DATA_MAJALAH_' . date('Ymd_His') . '.pdf';
+
+        return $pdf->download($fileName);
+    }
+
+    public function chart()
+{
+    $aktif = Magazine::where('actived', 1)->count();
+    $nonAktif = Magazine::where('actived', 0)->count();
+
+    return response()->json([
+        'labels' => ['Aktif', 'Non-Aktif'],
+        'data' => [$aktif, $nonAktif]
+    ]);
+}
 }

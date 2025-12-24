@@ -16,9 +16,8 @@ class UserExport implements FromCollection, withHeadIngs, withMapping
     * @return \Illuminate\Support\Collection
     */
     public function collection()
-    // whereIn('role', ['admin', 'staff'])->
     {
-        return User::whereIn('role', ['admin', 'staff'])->orderBy('created_at', 'ASC')->get();
+        return User::whereIn('role', ['admin'])->orderBy('created_at', 'ASC')->get();
     }
 
       public function headings(): array
@@ -29,7 +28,7 @@ class UserExport implements FromCollection, withHeadIngs, withMapping
     // menentuka td
     public function map($user): array
     {
-         $users = User::whereIn('role', ['admin', 'staff']);
+         $users = User::whereIn('role', 'admin');
 
 
             // menambahkan $key diatas dr 1 dst

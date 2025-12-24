@@ -2,15 +2,6 @@
 
 @section('content')
     <style>
-
-        .container-main {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-
-
         .page-title {
             color: var(--primary);
             font-weight: 700;
@@ -334,17 +325,17 @@
                         <p class="mb-0 opacity-75">Kelola data majalah</p>
                 </div>
                 <div class="action-buttons">
-                       <a href="{{ route('admin.magazines.export') }}" class="btn btn-danger">
-                        <i class="fa-regular fa-file-pdf me-1"></i>Export.pdf
+                       <a href="{{ route('admin.magazines.export-pdf') }}" class="btn btn-danger">
+                        <i class="fa-regular fa-file-pdf me-1"></i>Export(.pdf)
                     </a>
                     <a href="{{ route('admin.magazines.export') }}" class="btn btn-success">
-                        <i class="fas fa-file-excel me-1"></i>Export.xlsx
+                        <i class="fas fa-file-excel me-1"></i>Export(.xlsx)
                     </a>
                     <a href="{{ route('admin.magazines.trash') }}" class="btn btn-info">
-                        <i class="fas fa-trash-restore me-1"></i>Sampah
+                        <i class="fas fa-trash-restore me-1"></i>Data Sampah
                     </a>
                     <a href="{{ route('admin.magazines.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i>Tambah
+                        <i class="fas fa-plus-circle me-2"></i>Tambah Majalah
                     </a>
                 </div>
             </div>
@@ -450,7 +441,7 @@
                 <h4>Belum Ada Data Majalah</h4>
                 <p>Mulai dengan menambahkan majalah pertama</p>
                 <a href="{{ route('admin.magazines.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i>Tambah Majalah
+                    <i class="fas fa-plus-circle me-2"></i>Tambah Majalah
                 </a>
             </div>
         @endif

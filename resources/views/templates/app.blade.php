@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
 </head>
 <style>
+    * {
+        font-family: 'poppins';
+    }
     :root {
         --primary: #2c5f7d;
         --secondary: #4a89ac;
@@ -124,6 +127,12 @@
             box-shadow: var(--card-shadow);
         }
 
+         .container-main {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
     @media (max-width: 991.98px) {
         .center-nav {
             position: static;
@@ -170,13 +179,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                                     <i class="fas fa-bar-chart me-1"></i> Dashboard
-                                </a>
-                            </li>
-
-                        @elseif (Auth::check() && Auth::user()->role == 'staff')
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <i class="fas fa-receipt me-1"></i> Data Transaksi
                                 </a>
                             </li>
 

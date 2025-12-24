@@ -1,7 +1,7 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container mt-5">
+    <div class="container-main mt-5">
         @if (Session::get('success'))
             <div class="alert alert-success">{{ Session::get('success') }}</div>
         @endif

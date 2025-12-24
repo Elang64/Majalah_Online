@@ -13,6 +13,20 @@ class OrderController extends Controller
         //
     }
 
+public function chart()
+{
+    $paid = Order::where('status', 'paid')->count();
+    $pending = Order::where('status', 'pending')->count();
+
+    return response()->json([
+        'data' => [$paid, $pending]
+    ]);
+}
+
+
+
+
+
     public function create()
     {
         //

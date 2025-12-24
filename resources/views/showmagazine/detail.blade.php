@@ -244,7 +244,7 @@
 <div class="action-buttons">
     <div class="action-container">
         @if(!auth()->check())
-            <a href="{{ route('login') }}?redirect={{ url()->current() }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
                 <i class="fas fa-shopping-cart me-2"></i> BELI MAJALAH
             </a>
 
@@ -305,7 +305,7 @@
             cart_id: null,
             quantity: 1,
             total_price: $("#price").val(),
-            purchase_history: "Pembelian Majalah: {{ addslashes($magazines->title) }}",
+            purchase_history: "Pembelian Majalah: {{ addslashes($magazines->title) }}",//menambhakan karakter backslash
             payment: "pending",
             _token: "{{ csrf_token() }}"
         };

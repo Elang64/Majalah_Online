@@ -1,7 +1,7 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
         <div class="card w-70 d-block mx-auto text-center mt-4 p-4">
             <div class="card-body">
                 <div class="d-flex justify-content-end mb-3">
@@ -111,13 +111,12 @@
                                     <i class="fas fa-book-open"></i> Baca Majalah Online
                                 </a>
                             </div>
-                            <div>
-                                {{-- Generate QR Code untuk link majalah --}}
+                            {{-- <div>
                                 <div class="d-inline-block p-2 border rounded">
                                     {!! QrCode::size(100)->generate($order->magazine->digital_url) !!}
                                 </div>
                                 <p class="text-muted small mt-2">Scan QR Code untuk mengakses majalah</p>
-                            </div>
+                            </div> --}}
                         </div>
                     @endif
                 </div>
@@ -127,7 +126,7 @@
                     <a href="{{ route('home') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-home"></i> Kembali ke Beranda
                     </a>
-                    <a href="{{ route('magazines.detail', $order->magazine_id) }}" class="btn btn-primary">
+                    <a href="{{ route('home.magazines.all', $order->magazine_id) }}" class="btn btn-primary">
                         <i class="fas fa-book"></i> Lihat Majalah Lainnya
                     </a>
                     @if ($order->magazine->file_path)

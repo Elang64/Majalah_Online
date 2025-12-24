@@ -8,7 +8,7 @@
         <div class="d-flex justify-content-end">
             <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
-        <h5 class="mt-3">Data Pengguna (Admin & Staff)</h5>
+        <h5 class="mt-3">Data Pengguna Admin  </h5>
         <table class="table table-bordered">
             <tr class="text-center">
                 <th>No</th>
@@ -25,8 +25,6 @@
                     <th class="fw-bold" style="font-size: 0.655rem;">
                         @if ($item['role'] == 'admin')
                             <span class="alert alert-primary  py-1 px-2 m-0 d-inline-block">admin</span>
-                        @elseif($item['role'] == 'staff')
-                            <span class="alert alert-success  py-1 px-2 m-0 d-inline-block">staff</span>
                         @endif
                     </th>
 

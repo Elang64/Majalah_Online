@@ -35,11 +35,9 @@ Route::get('/SignUp', function () {
     return view('auth.signup');
 })->name('signup');
 
-Route::post('/SignUp', [UserController::class, 'register'])//akan di simpan table user
-->name('signup.send_data');//sifatnya unik
+Route::post('/SignUp', [UserController::class, 'register'])->name('signup.send_data');//sifatnya unik
 
-Route::post('/auth', [UserController::class, 'authentication'])
-->name('auth');
+Route::post('/auth', [UserController::class, 'authentication'])->name('auth');
 });
 
 //Logout
@@ -53,6 +51,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
 
     Route::prefix('/magazines')->name('magazines.')->group(function(){
     Route::get('/index', [MagazineController::class, 'index'])->name('index');
+    Route::get('/chart', [MagazineController::class, 'chart'])->name('chart');
     Route::get('/create', [MagazineController::class, 'create'])->name('create');
     Route::post('/store', [MagazineController::class, 'store'])->name('store');
     Route::get('/edit/{id}', [MagazineController::class, 'edit'])->name('edit');
@@ -64,6 +63,7 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
     Route::delete('/delete-permanent/{id}', [MagazineController::class, 'deletePermanent'])->name('delete_permanent');
     Route::get('/export', [MagazineController::class, 'export'])->name('export');
     Route::get('/datatables', [MagazineController::class, 'datatables'])->name('datatables');
+    Route::get('/pdf', [MagazineController::class, 'exportPdf'])->name('export-pdf');
     });
 
     Route::prefix('/users')->name('users.')->group(function(){
@@ -91,12 +91,5 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function()
     Route::patch('/restore/{id}', [PromoController::class, 'restore'])->name('restore');
     Route::delete('/delete-permanent/{id}', [PromoController::class, 'deletePermanent'])->name('delete_permanent');
     Route::get('/export', [PromoController::class, 'export'])->name('export');
-
     });
  });
-
-Route::prefix('/staff')->name('staff.')->group(function() {
-    Route::get('/dashboard', function () {
-        return view('staff.dashboard');
-    })->name('dashboard');
-  });

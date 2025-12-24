@@ -16,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-         $users = User::whereIn('role', ['admin', 'staff'])->get();
+         $users = User::whereIn('role', ['admin'])->get();
         return view('admin.user.index', compact('users'));
     }
 
@@ -74,13 +74,11 @@ class UserController extends Controller
             if (Auth::user()->role == 'admin') {
             return redirect()->route('admin.dashboard')->with('success', 'Berhasil Login!');// redirect() untuk tidak dihalaman itu saja akan diarahkan menuju route()
             }
-            elseif (Auth::User()->role == 'staff') {
-                return redirect()->route('staff.dashboard')->with('success', 'Berhasil Login!');
-            } else { //selain admin ke home
+             else { //selain admin ke home
                 return redirect()->route('home')->with('success', 'Berhasil login!');
             }
     } else {
-            return redirect()->back()->with('error', 'Gagal! pastikan email
+            return redirect()->back()->with('error', 'Gagal! Pastikan email
             dan password benar');
         }
     }
@@ -118,19 +116,13 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => 'staff',
-            'password' => Hash::make('staffMag'),
-        ],
-        [
           'name' => $request->name,
             'email' => $request->email,
             'role' => 'admin',
             'password' => Hash::make('adminMag'),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Staff berhasil ditambahkan');
+        return redirect()->route('admin.users.index')->with('success', 'Admin berhasil ditambahkan');
     }
 
 

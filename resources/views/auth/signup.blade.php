@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
-   <style>
+    <style>
         :root {
             --primary: #2c5f7d;
             --secondary: #4a89ac;
@@ -66,10 +66,11 @@
             transform: translateX(-4px);
         }
 
-        /* Form Area */
-        .form-control {
+        /* Forms Container */
+        .forms-container {
             position: absolute;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 50%;
             height: 100%;
             display: flex;
@@ -77,8 +78,8 @@
             justify-content: center;
             padding: 40px;
             transition: all 0.6s ease-in-out;
+            z-index: 2;
         }
-        .signin-form { z-index: 2; }
 
         /* Input Styling */
         .input-field {
@@ -92,6 +93,7 @@
             transform: translateY(-50%);
             color: var(--secondary);
             font-size: 1rem;
+            z-index: 3;
         }
         .input-field input {
             width: 100%;
@@ -101,6 +103,8 @@
             background: #f8fbff;
             font-size: 0.95rem;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
         .input-field input:focus {
             outline: none;
@@ -136,6 +140,7 @@
             cursor: pointer;
             transition: all 0.4s ease;
             box-shadow: 0 8px 25px rgba(44, 95, 125, 0.35);
+            margin-top: 10px;
         }
         .btn-submit:hover {
             background: #1e4a66;
@@ -144,10 +149,19 @@
         }
 
         /* Right Panel */
-        .panel {
+        .panels-container {
             position: absolute;
-            top: 0; right: 0;
+            top: 0;
+            right: 0;
             width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .panel {
+            width: 100%;
             height: 100%;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             display: flex;
@@ -174,6 +188,7 @@
             line-height: 1.6;
             margin-bottom: 32px;
             opacity: 0.92;
+            max-width: 400px;
         }
         .btn-transparent {
             padding: 12px 48px;
@@ -183,6 +198,9 @@
             border-radius: 50px;
             font-weight: 600;
             transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn-transparent:hover {
             background: white;
@@ -190,17 +208,68 @@
             transform: scale(1.05);
         }
 
+        /* Error message styling */
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+
+        .alert {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert-success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border: 1px solid #badbcc;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
-            .container { height: auto; min-height: 680px; }
-            .form-control, .panel { position: relative; width: 100%; }
-            .panel { border-radius: 32px 32px 0 0; order: -1; padding: 50px 30px; }
+            .container {
+                height: auto;
+                min-height: 680px;
+                display: flex;
+                flex-direction: column;
+            }
+            .forms-container, .panels-container {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+            .forms-container {
+                order: 2;
+                padding: 40px 30px;
+            }
+            .panels-container {
+                order: 1;
+            }
+            .panel {
+                border-radius: 32px 32px 0 0;
+                padding: 50px 30px;
+                height: 300px;
+            }
         }
+
         @media (max-width: 576px) {
             .container { border-radius: 24px; }
             .back-btn { top: 16px; left: 20px; font-size: 0.9rem; }
             h2 { font-size: 1.7rem; }
             .panel h3 { font-size: 1.5rem; }
+            .forms-container { padding: 30px 20px; }
+            .panel { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -213,21 +282,13 @@
             <span>Kembali</span>
         </a>
 
-        <!-- Background Decorative Elements -->
-        <div class="bg-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-        </div>
-
-
+        <!-- Forms Container -->
         <div class="forms-container">
             <div class="form-control signin-form">
-                <form method="POST" action="{{ route('signup.send_data') }}">
-                      @csrf
+                <form method="POST" action="{{ route('signup') }}">
+                    @csrf
                     <h2>Buat Akun Baru!</h2>
                     <p class="subtitle">Daftar untuk menikmati konten majalah secara penuh</p>
-
 
                     @if (Session::get('success'))
                         <div class="alert alert-success my-3">
@@ -240,27 +301,26 @@
 
                     <div class="row">
                         <div class="col">
-                             @error('first_name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div  data-mdb-ripple-init class="input-field">
-                            <i class="fas fa-user"></i>
-                            <input type="text" placeholder="First Name" name="first_name"
-                                @error('first_name') is-invalid @enderror">
+                            @error('first_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="input-field">
+                                <i class="fas fa-user"></i>
+                                <input type="text" placeholder="First Name" name="first_name" value="{{ old('first_name') }}"
+                                    class="@error('first_name') is-invalid @enderror">
+                            </div>
                         </div>
-                        </div>
-
 
                         <div class="col">
-                             @error('last_name')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div  data-mdb-ripple-init class="input-field">
-                            <input type="text" placeholder="Last Name" name="last_name"
-                                @error('last_name') is-invalid @enderror">
+                            @error('last_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="input-field">
+                                <i class="fas fa-user"></i>
+                                <input type="text" placeholder="Last Name" name="last_name" value="{{ old('last_name') }}"
+                                    class="@error('last_name') is-invalid @enderror">
+                            </div>
                         </div>
-                        </div>
-
                     </div>
 
                     <!-- Email Input -->
@@ -269,42 +329,38 @@
                     @enderror
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" placeholder="Email Address" name="email"
-                            @error('email') is-invalid @enderror>
+                        <input type="email" placeholder="Email Address" name="email" value="{{ old('email') }}"
+                            class="@error('email') is-invalid @enderror">
                     </div>
 
                     <!-- Password Input -->
                     @error('password')
                         <small class="text-danger">{{ $message }}</small>
                     @enderror
-                    <div  data-mdb-ripple-init class="input-field">
+                    <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password" name="password" class="password-input"
-                            @error('password') is-invalid @enderror>
-
+                        <input type="password" placeholder="Password" name="password"
+                            class="password-input @error('password') is-invalid @enderror">
                     </div>
-                    <!-- Submit Button -->
-                    <button  data-mdb-ripple-init type="submit" class="btn-submit">Sign Up</button>
 
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">Sign Up</button>
                 </form>
             </div>
         </div>
 
         <!-- Side Panel with Info -->
         <div class="panels-container">
-             <div class="panel right-panel">
+            <div class="panel">
                 <div class="content">
                     <i class="fas fa-user-check icon-large"></i>
                     <h3>Sudah Punya Akun?</h3>
                     <p>Selamat datang kembali! Masuk untuk mengakses akun Anda dan menikmati berbagai konten majalah terbaru.</p>
-                   <a href="{{route('login')}}">
-                    <button class="btn-transparent" id="login-btn">Login</button>
-                </a>
+                    <a href="{{ route('login') }}" class="btn-transparent">Login</a>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- MDB -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
